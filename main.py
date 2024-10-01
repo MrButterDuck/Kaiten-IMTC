@@ -42,7 +42,7 @@ async def kaiten_card_creater(db, record):
 
 if __name__ == "__main__":
     db = ConfigDatabase("Config")
-    bot = TelegramBot('7476281733:AAFW01U6tntZ5C6g4ee4QxZd32BO-dIyWQo', db)
+    bot = TelegramBot('', db)
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     loop.create_task(bot.run())
