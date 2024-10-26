@@ -49,6 +49,7 @@ if __name__ == "__main__":
         loop.create_task(bot.run())
         loop.create_task(updater(db, bot))
         try:
+            print('Bot is now running')
             loop.run_forever()
         except KeyboardInterrupt:
             pass

@@ -1,10 +1,8 @@
-import asyncio
 from telebot.async_telebot import AsyncTeleBot 
 from telebot import types, asyncio_filters
 from telebot.states import State, StatesGroup
 from telebot.states.asyncio.context import StateContext
 from telebot.asyncio_storage import StateMemoryStorage
-from db import ConfigDatabase
 from Kaiten import Kaiten
 
 class MyStates(StatesGroup):
@@ -42,15 +40,23 @@ class TelegramBot:
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
             btn1 = types.KeyboardButton("/back")
             markup.add(btn1)
-            if message.text == "/token": await state.set(MyStates.kaiten_token)
-            if message.text == "/domain": await state.set(MyStates.kaiten_domain)
-            if message.text == "/space_id": await state.set(MyStates.kaiten_space)
-            if message.text == "/board_id": await state.set(MyStates.kaiten_board)
-            if message.text == "/column_id": await state.set(MyStates.kaiten_column)
-            if message.text == "/url": await state.set(MyStates.sheet_url)
-            if message.text == "/set_timer": await state.set(MyStates.set_timer)
-            if message.text == "/im_the_boss": await state.set(MyStates.user_id)
-            await self.bot.send_message(message.from_user.id, f"Введите переменную", reply_markup=markup)
+            if message.text == "/token": 
+                await state.set(MyStates.kaiten_token)
+            if message.text == "/domain": 
+                await state.set(MyStates.kaiten_domain)
+            if message.text == "/space_id": 
+                await state.set(MyStates.kaiten_space)
+            if message.text == "/board_id": 
+                await state.set(MyStates.kaiten_board)
+            if message.text == "/column_id": 
+                await state.set(MyStates.kaiten_column)
+            if message.text == "/url": 
+                await state.set(MyStates.sheet_url)
+            if message.text == "/set_timer": 
+                await state.set(MyStates.set_timer)
+            if message.text == "/im_the_boss": 
+                await state.set(MyStates.user_id)
+            await self.bot.send_message(message.from_user.id, "Введите переменную", reply_markup=markup)
 
     def kaiten_module(self):
         @self.bot.message_handler(commands=['kaiten'])
@@ -119,7 +125,7 @@ class TelegramBot:
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
             btn1 = types.KeyboardButton("/menu")
             markup.add(btn1)
-            await self.bot.send_message(message.from_user.id, f"Запрос обрабатывается")
+            await self.bot.send_message(message.from_user.id, "Запрос обрабатывается")
             connection = await self.kaiten.check_conntection()
             if connection:
                 resp = await self.kaiten.get_all_boards()
@@ -134,7 +140,7 @@ class TelegramBot:
                                     msg += f'-+- -+- Колонка: {clmn[1]} - {str(clmn[0])}\n'
                 await self.bot.send_message(message.from_user.id, msg+'\n\nЗапомните нужные id и впишите, используая команды /space_id, /board_id и /column_id', reply_markup=markup)
             else:
-                await self.bot.send_message(message.from_user.id, f"Ошибка в подключении к Kaiten")
+                await self.bot.send_message(message.from_user.id, "Ошибка в подключении к Kaiten")
 
     def update_kaiten(self):
         self.kaiten = Kaiten(self.db.get_var("KAITEN_TOKEN"), self.db.get_var("KAITEN_DOMAIN"))
@@ -163,7 +169,6 @@ class TelegramBot:
         async def timer_menu(message: types.Message, state: StateContext):
             markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
             btn1 = types.KeyboardButton("/set_timer")
-            btn2 = types.KeyboardButton("/update_now")
             btn7 = types.KeyboardButton("/back")
             markup.add(btn1, btn7)
             await self.bot.send_message(message.from_user.id, "Установка частоты обновления таблицы: \n/set_timer - установить частоту обновления в минутах(число меньше и равное 0 - отключить обновление)\n/im_the_boss - установка вас для уведомлений", reply_markup=markup)
@@ -175,7 +180,6 @@ class TelegramBot:
             markup.add(btn1)
             await state.delete()
             try:
-                timer = int(message.text)
                 self.db.add_var('UPDATE_TIMER', int(message.text))
                 await self.bot.send_message(message.from_user.id, "Частота обновления установлена", reply_markup=markup)
             except ValueError:
