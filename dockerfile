@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /usr/src/app
 
 # Переменная окружения для хранения ссылки на репозиторий
-ARG REPO_URL=https://github.com/username/repository.git
+ARG REPO_URL=https://github.com/MrButterDuck/Kaiten-IMTC.git
 
 # Клонируем репозиторий
 RUN git clone $REPO_URL .
