@@ -19,25 +19,29 @@ class Kaiten:
                     "full_name": response.json()["full_name"], 
                     "email": response.json()["email"],
                     "username": response.json()["username"]}
-        else : return f"response error {response.status_code}"
+        else:
+            return f"response error {response.status_code}"
 
     def get_users(self):
         response = requests.get(url=self.url+"users", headers=self.headers)
         if response.status_code == 200:
             return response.json()
-        else : return f"response error {response.status_code}"
+        else: 
+            return f"response error {response.status_code}"
 
     def get_spaces(self):
         response = requests.get(url=self.url+"spaces", headers=self.headers)
         if response.status_code == 200:
             return list(map(lambda x:(x["id"], x["title"]), response.json()))
-        else : return f"response error {response.status_code}"
+        else:
+            return f"response error {response.status_code}"
 
     def get_boards(self, space_id):
         response = requests.get(url=self.url+f"spaces/{space_id}/boards", headers=self.headers)
         if response.status_code == 200:
             return list(map(lambda x:(x["id"], x["title"], list(map(lambda c: (c["id"], c["title"]), x["columns"]))), response.json()))
-        else : return f"response error {response.status_code}"
+        else: 
+            return f"response error {response.status_code}"
 
     def create_card(self, board_id, column_id, title, description, due_date):
         data = {
