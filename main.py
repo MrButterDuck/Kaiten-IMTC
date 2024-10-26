@@ -4,8 +4,7 @@ from db import ConfigDatabase
 from bot import TelegramBot
 from datetime import datetime
 import asyncio
-
-addedNewCard = False
+from pathlib import Path
 
 async def bot_start(bot):
     await bot.run()
@@ -23,7 +22,7 @@ async def updater(db, bot):
                     sheet = GoogleSheet(db.get_var("GOOGLE_URL"))
                     records = sheet.get_records()
                     last_record_time = records[-1]['Отметка времени']
-                    if last_update_buffer > datetime.strptime(last_record_time, "%d.%m.%Y %H:%M:%S"):
+                    if last_update_buffer < datetime.strptime(last_record_time, "%d.%m.%Y %H:%M:%S"):
                         message = await kaiten_card_creater(db, list(records[-1].values()))
                         print('added new task'+ datetime.now().strftime("%d.%m.%Y %H:%M:%S"))
                         await bot.notification(message)
@@ -41,13 +40,17 @@ async def kaiten_card_creater(db, record):
     return f'Тема: {record[3]}\nДедлайн: {record[9]}\n\nКонтактные данные: {record[1]}\n\nПлатформа для публикации: {record[2]}\n\nКлючевые факты текста: {record[4]}\n\nМатериал заказчика: {record[5]}\n\nОписание изображения: {record[6]}\n\nРазмер изображения: {record[7]}' 
 
 if __name__ == "__main__":
-    db = ConfigDatabase("Config")
-    bot = TelegramBot('', db)
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.create_task(bot.run())
-    loop.create_task(updater(db, bot))
-    try:
-        loop.run_forever()
-    except KeyboardInterrupt:
-        pass
+    if Path('googleAPI.json').is_file() and Path('bot_token.txt').is_file():
+        db = ConfigDatabase("Config")
+        token = Path('bot_token.txt').read_text()
+        bot = TelegramBot(token, db)
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.create_task(bot.run())
+        loop.create_task(updater(db, bot))
+        try:
+            loop.run_forever()
+        except KeyboardInterrupt:
+            pass
+    else:
+        print('Missing some files, cant start up')
