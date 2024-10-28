@@ -36,7 +36,7 @@ async def updater(db, bot):
 async def kaiten_card_creater(db, record):
     kaiten = Kaiten(db.get_var("KAITEN_TOKEN"), db.get_var("KAITEN_DOMAIN"))
     desc = f'Контактные данные: {record[1]}\n\nПлатформа для публикации: {record[2]}\n\nКлючевые факты текста: {record[4]}\n\nМатериал заказчика: {record[5]}\n\nОписание изображения: {record[6]}\n\nРазмер изображения: {record[7]}' 
-    kaiten.create_card(db.get_var("KAITEN_BOARD"),db.get_var("KAITEN_COLUMN"), record[3], desc, record[9])
+    kaiten.create_card(db.get_var("KAITEN_BOARD"),db.get_var("KAITEN_COLUMN"), record[3], desc, datetime.strftime(datetime.strptime(record[9], "%d.%m.%Y"), "%Y-%m-%d"))
     return f'Тема: {record[3]}\nДедлайн: {record[9]}\n\nКонтактные данные: {record[1]}\n\nПлатформа для публикации: {record[2]}\n\nКлючевые факты текста: {record[4]}\n\nМатериал заказчика: {record[5]}\n\nОписание изображения: {record[6]}\n\nРазмер изображения: {record[7]}' 
 
 if __name__ == "__main__":

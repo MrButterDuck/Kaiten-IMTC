@@ -30,6 +30,3 @@ RUN chmod +x check_for_update.sh
 
 # Команда для запуска основного файла (скрипт проверки обновлений)
 CMD ["./check_for_update.sh"]
-
-# Команда для запуска основного Python-скрипта
-CMD ["python", "main.py"]
