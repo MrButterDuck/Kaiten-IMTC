@@ -31,7 +31,7 @@ async def updater(db, bot):
         else:
             await asyncio.sleep(10)
             delay = db.get_var("UPDATE_TIMER")
-            print('no task'+ datetime.now().strftime("%d.%m.%Y %H:%M:%S"))
+            #print('no task '+ datetime.now().strftime("%d.%m.%Y %H:%M:%S"))
 
 async def kaiten_card_creater(db, record):
     kaiten = Kaiten(db.get_var("KAITEN_TOKEN"), db.get_var("KAITEN_DOMAIN"))
