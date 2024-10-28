@@ -32,8 +32,13 @@ class TelegramBot:
             btn2 = types.KeyboardButton("/google_sheets")
             btn3 = types.KeyboardButton("/timer")
             markup.add(btn1, btn2, btn3)
+            user_message = (f"Kaiten токен: {self.db.get_var("KAITEN_TOKEN")}\n"
+                            f"Kaiten домен: {self.db.get_var("KAITEN_DOMAIN")}\n"
+                            f"Kaiten таблица: {self.db.get_var("KAITEN_SPACE")}-{self.db.get_var("KAITEN_BOARD")}-{self.db.get_var("KAITEN_COLUMN")}\n"
+                            f"Google Sheet: {self.db.get_var("GOOGLE_URL")}\nЧастота обновления: {self.db.get_var("UPDATE_TIMER")}\n"
+                            "\n=================\n\nСписок команд: \n/kaiten - настройки kaiten\n/google_sheets - настройки гугл таблиц\n/timer - настройки таймера")
             await state.delete()
-            await self.bot.send_message(message.from_user.id, f"Kaiten токен: {self.db.get_var("KAITEN_TOKEN")}\nKaiten домен: {self.db.get_var("KAITEN_DOMAIN")}\nKaiten таблица: {self.db.get_var("KAITEN_SPACE")}-{self.db.get_var("KAITEN_BOARD")}-{self.db.get_var("KAITEN_COLUMN")}\nGoogle Sheet: {self.db.get_var("GOOGLE_URL")}\nЧастота обновления: {self.db.get_var("UPDATE_TIMER")}\n\n=================\n\nСписок команд: \n/kaiten - настройки kaiten\n/google_sheets - настройки гугл таблиц\n/timer - настройки таймера", reply_markup=markup)
+            await self.bot.send_message(message.from_user.id, user_message , reply_markup=markup)
         
         @self.bot.message_handler(commands=['token', 'domain', 'space_id', 'board_id', 'column_id', 'url', 'set_timer'])
         async def set_var(message: types.Message, state: StateContext):
