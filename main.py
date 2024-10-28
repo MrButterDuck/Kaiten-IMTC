@@ -17,7 +17,6 @@ async def updater(db, bot):
         if delay and int(delay) > 0:
             if (datetime.now() - last_update).seconds >= int(delay)*60:
                 last_update_buffer = last_update
-                last_update = datetime.now()
                 if db.get_var("GOOGLE_URL"):
                     sheet = GoogleSheet(db.get_var("GOOGLE_URL"))
                     records = sheet.get_records()
@@ -27,6 +26,7 @@ async def updater(db, bot):
                         print('added new task'+ datetime.now().strftime("%d.%m.%Y %H:%M:%S"))
                         await bot.notification(message)
                 delay = db.get_var("UPDATE_TIMER")
+                last_update = datetime.now()
             await asyncio.sleep(10)
         else:
             await asyncio.sleep(10)
