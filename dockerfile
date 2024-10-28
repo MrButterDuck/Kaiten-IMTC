@@ -4,7 +4,14 @@ FROM python:3.11-slim
 # Устанавливаем необходимые системные зависимости
 RUN apt-get update && apt-get install -y \
     git \
+    tzdata \
     && rm -rf /var/lib/apt/lists/*
+
+# Устанавливаем временную зону Владивостока
+ENV TZ=Asia/Vladivostok
+
+# Применяем временную зону
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Определяем рабочую директорию внутри контейнера
 WORKDIR /usr/src/app
@@ -23,3 +30,6 @@ RUN chmod +x check_for_update.sh
 
 # Команда для запуска основного файла (скрипт проверки обновлений)
 CMD ["./check_for_update.sh"]
+
+# Команда для запуска основного Python-скрипта
+CMD ["python", "main.py"]

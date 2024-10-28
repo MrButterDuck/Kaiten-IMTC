@@ -48,8 +48,8 @@ if __name__ == "__main__":
         asyncio.set_event_loop(loop)
         loop.create_task(bot.run())
         loop.create_task(updater(db, bot))
+        print('Bot is now running')
         try:
-            print('Bot is now running')
             loop.run_forever()
         except KeyboardInterrupt:
             pass
